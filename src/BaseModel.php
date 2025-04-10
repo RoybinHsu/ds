@@ -2,7 +2,7 @@
 
 namespace ds;
 
-use Exception;
+use ds\exceptions\ExistException;
 
 
 class BaseModel
@@ -18,7 +18,7 @@ class BaseModel
 
     /**
      * 转成数组
-     * 
+     *
      * @return array
      */
     public function toArray(): array
@@ -31,22 +31,27 @@ class BaseModel
 
     /**
      * 获取和设置属性
-     * 
-     * @return string
+     *
+     * @param $name
+     * @param $arguments
+     *
+     * @return string | $this
+     * @throws ExistException
      */
     public function __call($name, $arguments)
     {
         $property = lcfirst(substr($name, 3));
         if (!property_exists($this, $property)) {
-            throw new Exception("Property {$property} does not exist in " . get_class($this));
+            throw new ExistException("Property {$property} does not exist in " . get_class($this));
         }
-        if (str_starts_with($name, 'set')) {
+        $prefix = substr($name, 0, 3);
+        if ($prefix === 'set') {
             $this->$property = $arguments[0] ?? null;
             return $this;
         }
-        if (str_starts_with($name, 'get')) {
+        if ($prefix === 'get') {
             return $this->$property;
         }
-        throw new Exception("Method {$name} does not exist in " . get_class($this));
+        throw new ExistException("Method {$name} does not exist in " . get_class($this));
     }
 }

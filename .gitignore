@@ -6,3 +6,6 @@ ds.php
 .vscode
 node_modules
 DS_Store
+response.json
+response
+.DS_Store

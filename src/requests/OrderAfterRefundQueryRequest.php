@@ -4,13 +4,13 @@ namespace ds\requests;
 
 use ds\BaseRequest;
 
-class OrderQueryRequest extends BaseRequest
+class OrderAfterRefundQueryRequest extends BaseRequest
 {
     /**
      * @inheritDoc
      */
     public function getUri(): string
     {
-        return 'ds.omni.erp.third.order.query';
+        return 'ds.omni.erp.third.order.after.refund.query';
     }
 }

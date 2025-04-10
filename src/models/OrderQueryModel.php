@@ -5,6 +5,30 @@ namespace ds\models;
 use ds\BaseModel;
 
 /**
+ * @method self setPageNo(int $pageNo)
+ * @method int getPageNo()
+ * @method self setPageSize(int $pageSize)
+ * @method int getPageSize()
+ * @method self setStartTime(string $startTime)
+ * @method string getStartTime()
+ * @method self setEndTime(string $endTime)
+ * @method string getEndTime()
+ * @method self setRefOid(string $refOid)
+ * @method string getRefOid()
+ * @method self setTimeType(int $timeType)
+ * @method int getTimeType()
+ * @method self setReceiverMobile(string $receiverMobile)
+ * @method string getReceiverMobile()
+ * @method self setReceiverPhone(string $receiverPhone)
+ * @method string getReceiverPhone()
+ * @method self setReceiverName(string $receiverName)
+ * @method string getReceiverName()
+ * @method self setRefBuyerNick(string $refBuyerNick)
+ * @method string getRefBuyerNick()
+ * @method self setPosId(int $posId)
+ * @method int getPosId()
+ * @method self setPosCode(string $posCode)
+ * @method string getPosCode()
  * @see http://wiki.yitaosoft.com/#/share/Rd8xagXg/oNzvkW2D
  */
 class OrderQueryModel extends BaseModel
