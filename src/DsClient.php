@@ -58,8 +58,6 @@ class DsClient implements ClientInterface
         $options[RequestOptions::HEADERS] = $header;
         $options[RequestOptions::BODY]    = json_encode($body);
         $options[RequestOptions::QUERY]   = $commonParams;
-        echo json_encode($options) . "\n\n";
-        die;
         try {
             $client = new GzClient(['base_uri' => $url]);
             $res    = $client->request($method, '', $options);

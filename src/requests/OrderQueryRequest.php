@@ -19,8 +19,6 @@ class OrderQueryRequest extends BaseRequest
      */
     public function getParams(): array
     {
-        //print_r($this->data->toArray());
-        //die;
         return $this->data->toArray();
     }
 
