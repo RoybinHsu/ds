@@ -1,9 +1,0 @@
-.idea
-Thumbs.db
-.vscode
-.DS_Store
-*.sublime-workspace
-*.sublime-project
-vendor
-ds.php
-composer.lock
