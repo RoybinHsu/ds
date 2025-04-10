@@ -9,8 +9,11 @@ use GuzzleHttp\RequestOptions;
 abstract class BaseRequest implements RequestInterface
 {
 
-    protected BaseModel $data;
-    public function __construct(BaseModel $data)
+    /**
+     * @var BaseModel | array
+     */
+    protected $data;
+    public function __construct(?BaseModel $data = null)
     {
         $this->data = $data;
     }
