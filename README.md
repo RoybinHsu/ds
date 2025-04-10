@@ -1,4 +1,4 @@
-### 测试环境
+## 环境
 ```
 PHP 7.4.7 (cli) (built: Jun 11 2020 18:46:58) ( NTS )
 Copyright (c) The PHP Group
@@ -8,14 +8,14 @@ Zend Engine v3.4.0, Copyright (c) Zend Technologies
 Composer version 2.3.5 2022-04-13 16:43:00
 ```
 
-### 扩展引入
+## 扩展引入
 
-#### 1. 直接引入
+### 1. 直接引入
 ```
 $ composer require roybinhsu/ds-sdk
 
 ```
-#### 2. 自定义
+### 2. 自定义
 ```
 $ git clone git@github.com:RoybinHsu/ds.git
 $ cd ds
@@ -27,7 +27,7 @@ require_once 'vendor/autoload.php';
 
 ```
 
-
+### 3-1 基础使用
 ```
 use ds\DsClient;
 use ds\requests\OrderQueryRequest;
@@ -50,5 +50,20 @@ $requestModel->refOid = '123456678090980980,98798678676157468';
 $request  = new OrderQueryRequest($requestModel);
 $response  = $client->send($request);
 
-# 2025年04月10日17:48:31
+```
+
+### 3-2 监听事件使用
+```
+$data = [
+    'refOid' => '123456678090980980,98798678676157468'
+];
+$requestModel = new OrderQueryModel($data);
+$request  = new OrderQueryRequest($requestModel);
+$client->event->on(\ds\Event::BEFORE_SEND, function($args) {
+    // TODO 发送请求前业务逻辑
+});
+$client->event->on(\ds\Event::AFTER_SEND, function($args) {
+    // TODO 发送请求后业务逻辑
+});
+$response = $client->send($request);
 ```

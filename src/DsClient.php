@@ -48,6 +48,13 @@ class DsClient extends BaseModel implements ClientInterface
     private array $_options;
 
     /**
+     * 时间机
+     *
+     * @var Event|null
+     */
+    public ?Event $event = null;
+
+    /**
      * 初始化数据
      *
      * @param string $appKey
@@ -61,6 +68,9 @@ class DsClient extends BaseModel implements ClientInterface
         $this->appSecret = $appSecret;
         if (!$this->appKey || !$this->appSecret) {
             throw new InvalidException('缺少参数 [appKey] 或 [appSecret]');
+        }
+        if ($this->event === null) {
+            $this->event = new Event();
         }
         parent::__construct();
     }
@@ -77,14 +87,19 @@ class DsClient extends BaseModel implements ClientInterface
      */
     public function send(RequestInterface $request): ?array
     {
-        $url      = $this->buildUrl();
-        $options  = $this->buildRequestOptions($request);
-        $client   = new GzClient(['base_uri' => $url]);
+        $url     = $this->buildUrl();
+        $options = $this->buildRequestOptions($request);
+        $client  = new GzClient(['base_uri' => $url]);
+        $this->event->trigger(Event::BEFORE_SEND, $options);
+        return [];
         $response = $client->request($request->getMethod(), '', $options);
         if ($response->getStatusCode() !== 200) {
-            throw new HttpException('HTTP 请求失败，状态码：' . $response->getStatusCode());
+            $msg = 'HTTP 请求失败，状态码：' . $response->getStatusCode();
+            $this->event->trigger(Event::SEND_ERROR, $msg, $response);
+            throw new HttpException($msg);
         }
-        return $this->parseResponse($response->getBody()->getContents());
+        $res = $this->parseResponse($response->getBody()->getContents());
+        $this->event->trigger(Event::AFTER_SEND, $res);
     }
 
     /**
@@ -131,11 +146,15 @@ class DsClient extends BaseModel implements ClientInterface
         if ($response) {
             $decoded = json_decode($response, true);
             if ($decoded === null) {
-                throw new InvalidException('点三系统响应数据无效：无法解析 JSON');
+                $msg = '点三系统响应数据无效：无法解析 JSON';
+                $this->event->trigger(Event::SEND_ERROR, $msg);
+                throw new InvalidException($msg);
             }
             return $decoded;
         }
-        throw new InvalidException('点三系统响应数据无效：响应为空');
+        $msg = '点三系统响应数据无效：响应为空';
+        $this->event->trigger(Event::SEND_ERROR, $msg);
+        throw new InvalidException($msg);
     }
 
     /**
