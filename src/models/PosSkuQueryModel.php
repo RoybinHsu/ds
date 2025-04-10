@@ -12,6 +12,12 @@ use ds\BaseModel;
  * @method int getPageSize()
  * @method string getRefSpuIds()
  * @method string getRefSkuIds()
+ * @method self setPosCode(string $posCode)
+ * @method self setOuterIds(string $outerIds)
+ * @method self setPageNo(int $pageNo)
+ * @method self setPageSize(int $pageSize)
+ * @method self setRefSpuIds(string $refSpuIds)
+ * @method self setRefSkuIds(string $refSkuIds)
  *
  *
  */
