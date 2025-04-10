@@ -1,0 +1,21 @@
+{
+  "name": "roybinhsu/ds-sdk",
+  "description": "dian san sdk",
+  "type": "library",
+  "require": {
+    "php": ">=7.4",
+    "guzzlehttp/guzzle": "^7.3"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "roybinhsu"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "ds\\": "src/"
+    }
+  },
+  "minimum-stability": "stable"
+}
