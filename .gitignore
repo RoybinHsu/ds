@@ -1,0 +1,8 @@
+.idea
+vendor
+.env
+composer.lock
+ds.php
+.vscode
+node_modules
+DS_Store
