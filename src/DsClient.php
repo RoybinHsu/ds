@@ -91,7 +91,6 @@ class DsClient extends BaseModel implements ClientInterface
         $options = $this->buildRequestOptions($request);
         $client  = new GzClient(['base_uri' => $url]);
         $this->event->trigger(Event::BEFORE_SEND, $options);
-        return [];
         $response = $client->request($request->getMethod(), '', $options);
         if ($response->getStatusCode() !== 200) {
             $msg = 'HTTP 请求失败，状态码：' . $response->getStatusCode();
