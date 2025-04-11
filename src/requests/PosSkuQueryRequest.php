@@ -17,4 +17,13 @@ class PosSkuQueryRequest extends BaseRequest
     {
         return 'ds.omni.erp.third.pos.sku.query';
     }
+
+    /**
+     * @return void
+     */
+    public function buildResponse()
+    {
+
+    }
+
 }

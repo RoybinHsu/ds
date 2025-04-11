@@ -78,12 +78,12 @@ class DsClient extends BaseModel implements ClientInterface
      *
      * @param RequestInterface $request
      *
-     * @return array|null
+     * @return mixed|null
      * @throws GuzzleException
      * @throws HttpException
      * @throws InvalidException
      */
-    public function send(RequestInterface $request): ?array
+    public function send(RequestInterface $request)
     {
         $url     = $this->buildUrl();
         $options = $this->buildRequestOptions($request);
@@ -97,7 +97,7 @@ class DsClient extends BaseModel implements ClientInterface
         }
         $res = $this->parseResponse($response->getBody()->getContents());
         $this->event->trigger(Event::AFTER_SEND, $res);
-        return $res;
+        return $request->buildResponse($res);
     }
 
     /**

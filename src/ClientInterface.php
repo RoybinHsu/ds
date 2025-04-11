@@ -12,6 +12,6 @@ interface ClientInterface
      *
      * @return mixed
      */
-    public function send(RequestInterface $request): ?array;
+    public function send(RequestInterface $request);
 
 }

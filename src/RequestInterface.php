@@ -1,6 +1,9 @@
 <?php
 namespace ds;
 
+use ds\responses\OrderQueryResponse;
+use ds\Response;
+
 interface RequestInterface
 {
     /**
@@ -31,12 +34,12 @@ interface RequestInterface
      */
     public function getMethod(): string;
 
-    ///**
-    // * 公用参数
-    // *
-    // * @return array
-    // */
-    //public function getCommonParams(): array;
+
+    /**
+     * 设置响应的数据
+     * @return mixed
+     */
+    public function buildResponse(array $response);
 
 
 

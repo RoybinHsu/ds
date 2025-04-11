@@ -56,4 +56,12 @@ class PosSkuQtyUpdateRequest extends BaseRequest
         }
         return $p;
     }
+
+    /**
+     * @return void
+     */
+    public function buildResponse()
+    {
+
+    }
 }
