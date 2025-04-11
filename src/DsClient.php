@@ -99,6 +99,7 @@ class DsClient extends BaseModel implements ClientInterface
         }
         $res = $this->parseResponse($response->getBody()->getContents());
         $this->event->trigger(Event::AFTER_SEND, $res);
+        return $res;
     }
 
     /**
