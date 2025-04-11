@@ -42,13 +42,12 @@ class Event
      *
      * @param string $event
      * @param callable|null $callback
-     *
-     * @return bool
+     * @return void
      */
-    public function off(string $event, ?callable $callback = null): bool
+    public function off(string $event, ?callable $callback = null)
     {
         if (!isset($this->listeners[$event])) {
-            return true;
+            return;
         }
         if ($callback === null) {
             // 移除监听

@@ -65,6 +65,6 @@ $client->event->on(\ds\Event::BEFORE_SEND, function($options) {
 $client->event->on(\ds\Event::AFTER_SEND, function($args) {
     // TODO 发送请求后业务逻辑
 });
-
+// $client->event->off(Event::BEFORE_SEND);
 $response = $client->send($request);
 ```
