@@ -59,11 +59,12 @@ $data = [
 ];
 $requestModel = new OrderQueryModel($data);
 $request  = new OrderQueryRequest($requestModel);
-$client->event->on(\ds\Event::BEFORE_SEND, function($args) {
+$client->event->on(\ds\Event::BEFORE_SEND, function($options) {
     // TODO 发送请求前业务逻辑
 });
 $client->event->on(\ds\Event::AFTER_SEND, function($args) {
     // TODO 发送请求后业务逻辑
 });
+
 $response = $client->send($request);
 ```

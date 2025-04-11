@@ -69,9 +69,7 @@ class DsClient extends BaseModel implements ClientInterface
         if (!$this->appKey || !$this->appSecret) {
             throw new InvalidException('缺少参数 [appKey] 或 [appSecret]');
         }
-        if ($this->event === null) {
-            $this->event = new Event();
-        }
+        $this->event = $this->event ?? new Event();
         parent::__construct();
     }
 
@@ -125,8 +123,10 @@ class DsClient extends BaseModel implements ClientInterface
      */
     private function buildRequestOptions(RequestInterface $request): array
     {
+        if (!empty($request->getHeaders())) {
+            $this->_options[RequestOptions::HEADERS] = $request->getHeaders();
+        }
         $this->_options = [
-            RequestOptions::HEADERS => $request->getHeaders(),
             RequestOptions::BODY    => json_encode($request->getParams()),
             RequestOptions::QUERY   => $this->requestCommonParams($request)->toArray(),
         ];

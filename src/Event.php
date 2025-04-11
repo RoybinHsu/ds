@@ -72,7 +72,6 @@ class Event
      */
     public function trigger($event, ...$args)
     {
-        var_dump($event, $this->listeners);
         if (key_exists($event, $this->listeners)) {
             foreach ($this->listeners[$event] as $index => $listen) {
                 call_user_func_array($listen['callback'], $args);
