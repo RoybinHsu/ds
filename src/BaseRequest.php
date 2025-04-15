@@ -65,7 +65,7 @@ abstract class BaseRequest implements RequestInterface
      *
      * @param array $response
      *
-     * @return mixed
+     * @return mixed|BaseModel
      * @throws ReflectionException
      */
     public function buildResponse(array $response)
