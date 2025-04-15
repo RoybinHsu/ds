@@ -88,24 +88,23 @@ abstract class BaseRequest implements RequestInterface
     public function array2Object(array $data, $className)
     {
         $object = new $className();
-        //echo $className . "+_+_+__+_+ \n";
         foreach ($data as $key => $value) {
-            // 处理下划线属性（如 _req_id -> $_req_id）
+
             $propertyName = ($key === '_req_id') ? '_req_id' : $key;
             if (property_exists($object, $propertyName)) {
                 // 递归处理嵌套对象
                 $nestedClass = $this->getNestedClass($className, $propertyName);
-                //echo "propertyName:" . $propertyName . "\n";
                 $hasClass = $this->classExists($nestedClass);
-                //var_dump('][][][][', $hasClass, '][][]]');
                 if (is_array($value) && $hasClass !== false) {
                     if ($this->isIndexedArray($value)) {
                         foreach ($value as $obj) {
                             $object->$propertyName[] = $this->array2Object($obj, $hasClass);
                         }
                     }
-                    if ($this->isAssocArray($value)) {
+                    if ($this->isAssocArray($value) && $value) {
                         $object->$propertyName = $this->array2Object($value, $hasClass);
+                    } else {
+                        $object->$propertyName = $value;
                     }
                 } else {
                     $object->$propertyName = $value;
