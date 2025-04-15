@@ -88,26 +88,24 @@ abstract class BaseRequest implements RequestInterface
     public function array2Object(array $data, $className)
     {
         $object = new $className();
-        foreach ($data as $key => $value) {
-
-            $propertyName = ($key === '_req_id') ? '_req_id' : $key;
-            if (property_exists($object, $propertyName)) {
-                // 递归处理嵌套对象
-                $nestedClass = $this->getNestedClass($className, $propertyName);
-                $hasClass = $this->classExists($nestedClass);
-                if (is_array($value) && $hasClass !== false) {
-                    if ($this->isIndexedArray($value)) {
-                        foreach ($value as $obj) {
-                            $object->$propertyName[] = $this->array2Object($obj, $hasClass);
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $propertyName = $key;
+                if (property_exists($object, $propertyName)) {
+                    // 递归处理嵌套对象
+                    $nestedClass = $this->getNestedClass($className, $propertyName);
+                    $hasClass    = $this->classExists($nestedClass);
+                    if (is_array($value) && $hasClass !== false) {
+                        if ($this->isIndexedArray($value)) {
+                            foreach ($value as $obj) {
+                                $object->$propertyName[] = $this->array2Object($obj, $hasClass);
+                            }
+                        } elseif ($this->isAssocArray($value)) {
+                            $object->$propertyName = $this->array2Object($value, $hasClass);
                         }
-                    }
-                    if ($this->isAssocArray($value) && $value) {
-                        $object->$propertyName = $this->array2Object($value, $hasClass);
                     } else {
                         $object->$propertyName = $value;
                     }
-                } else {
-                    $object->$propertyName = $value;
                 }
             }
         }
