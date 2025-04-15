@@ -176,7 +176,7 @@ abstract class BaseRequest implements RequestInterface
         $type      = $matches[1];
         $isArray   = substr($type, -2) === '[]';          // Check if it's an array type
         $className = preg_replace('/[\[\]]/', '', $type); // Remove array brackets if present
-        return compact('className', 'isArray');
+        return [$className, $isArray];
     }
 
 
