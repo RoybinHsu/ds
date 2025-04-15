@@ -60,6 +60,7 @@ abstract class BaseRequest implements RequestInterface
     {
         return $this->data->toArray();
     }
+
     /**
      * 构建响应数据
      *
@@ -93,15 +94,19 @@ abstract class BaseRequest implements RequestInterface
                 $propertyName = $key;
                 if (property_exists($object, $propertyName)) {
                     // 递归处理嵌套对象
-                    $nestedClass = $this->getNestedClass($className, $propertyName);
-                    $hasClass    = $this->classExists($nestedClass);
+                    [$nestedClass, $isArray] = $this->getNestedClass($className, $propertyName);
+                    $hasClass = $this->classExists($nestedClass);
                     if (is_array($value) && $hasClass !== false) {
                         if ($this->isIndexedArray($value)) {
                             foreach ($value as $obj) {
                                 $object->$propertyName[] = $this->array2Object($obj, $hasClass);
                             }
                         } elseif ($this->isAssocArray($value)) {
-                            $object->$propertyName = $this->array2Object($value, $hasClass);
+                            if ($isArray) {
+                                $object->$propertyName = [];
+                            } else {
+                                $object->$propertyName = $this->array2Object($value, $hasClass);
+                            }
                         }
                     } else {
                         $object->$propertyName = $value;
@@ -155,17 +160,23 @@ abstract class BaseRequest implements RequestInterface
      * @param $parentClass
      * @param $propertyName
      *
-     * @return string|null
+     * @return array|null
      * @throws ReflectionException
      */
-    public function getNestedClass($parentClass, $propertyName): ?string
+    public function getNestedClass($parentClass, $propertyName): ?array
     {
         $reflection = new ReflectionClass($parentClass);
         $property   = $reflection->getProperty($propertyName);
         $docComment = $property->getDocComment();
         // 解析 @var 注解中的类名（如 BaseResponse|null）
         preg_match('/@var\s+([^\s|]+)/', $docComment, $matches);
-        return preg_replace('/[\[\]]/', '', $matches[1]) ?? null;
+        if (!isset($matches[1])) {
+            return null;
+        }
+        $type      = $matches[1];
+        $isArray   = substr($type, -2) === '[]';          // Check if it's an array type
+        $className = preg_replace('/[\[\]]/', '', $type); // Remove array brackets if present
+        return compact($className, $isArray);
     }
 
 
