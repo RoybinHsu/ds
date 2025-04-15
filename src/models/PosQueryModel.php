@@ -4,6 +4,16 @@ namespace ds\models;
 
 use ds\BaseModel;
 
+/**
+ * @method string[] getCodes()
+ * @method string[] getNames()
+ * @method int getPageNo()
+ * @method int getPageSize()
+ * @method self setCodes(string[] $codes)
+ * @method self setNames(string[] $names)
+ * @method self setPageNo(int $pageNo)
+ * @method self setPageSize(int $pageSize)
+ */
 class PosQueryModel extends BaseModel
 {
     /**
