@@ -129,7 +129,7 @@ class DsClient extends BaseModel implements ClientInterface
             $this->_options[RequestOptions::HEADERS] = $request->getHeaders();
         }
         $this->_options = [
-            RequestOptions::BODY  => json_encode($request->getParams()),
+            RequestOptions::BODY  => json_encode($request->getParams(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             RequestOptions::QUERY => $this->requestCommonParams($request)->toArray(),
         ];
         return $this->_options;
@@ -187,7 +187,7 @@ class DsClient extends BaseModel implements ClientInterface
      */
     protected function _sign(CommonParamsModel $model, RequestInterface $request): CommonParamsModel
     {
-        $sign = $this->sign($model, json_encode($request->getParams(), JSON_UNESCAPED_UNICODE));
+        $sign = $this->sign($model, json_encode($request->getParams(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         $model->setSign($sign);
         return $model;
     }
