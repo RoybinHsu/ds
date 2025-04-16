@@ -35,12 +35,5 @@ interface RequestInterface
     public function getMethod(): string;
 
 
-    /**
-     * 设置响应的数据
-     * @return mixed
-     */
-    public function buildResponse(array $response);
-
-
 
 }

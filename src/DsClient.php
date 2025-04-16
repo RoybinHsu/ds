@@ -7,6 +7,8 @@ use ds\exceptions\InvalidException;
 use GuzzleHttp\Client as GzClient;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * @method string getHost()
@@ -76,14 +78,15 @@ class DsClient extends BaseModel implements ClientInterface
     /**
      * 发送一个请求
      *
-     * @param RequestInterface $request
+     * @param BaseRequest $request
      *
      * @return mixed|null
      * @throws GuzzleException
      * @throws HttpException
      * @throws InvalidException
+     * @throws ReflectionException
      */
-    public function send(RequestInterface $request)
+    public function send(BaseRequest $request)
     {
         $url     = $this->buildUrl();
         $options = $this->buildRequestOptions($request);
@@ -97,7 +100,7 @@ class DsClient extends BaseModel implements ClientInterface
         }
         $res = $this->parseResponse($response->getBody()->getContents());
         $this->event->trigger(Event::AFTER_SEND, $res);
-        return $request->buildResponse($res);
+        return $this->buildResponse($request, $res);
     }
 
     /**
@@ -231,4 +234,137 @@ class DsClient extends BaseModel implements ClientInterface
     {
         return $this->_options;
     }
+
+    /**
+     * 构建响应数据
+     *
+     * @param BaseRequest $request
+     * @param array $response
+     *
+     * @return mixed|BaseModel
+     * @throws ReflectionException
+     */
+    public function buildResponse(BaseRequest $request, array $response)
+    {
+        if ($request->responseClass === null) {
+            return $response;
+        }
+        return $this->array2Object($response['response']['data'], $request->responseClass);
+    }
+
+    /**
+     * 将数组对象化,变成方便查看字段名称
+     *
+     * @param array $data
+     * @param $className
+     *
+     * @return mixed
+     * @throws ReflectionException
+     */
+    public function array2Object(array $data, $className)
+    {
+        $object = new $className();
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $propertyName = $key;
+                if (property_exists($object, $propertyName)) {
+                    // 递归处理嵌套对象
+                    [$nestedClass, $isArray] = $this->getNestedClass($className, $propertyName);
+                    $hasClass = $this->classExists($nestedClass);
+                    if (is_array($value) && $hasClass !== false) {
+                        if ($this->isIndexedArray($value)) {
+                            foreach ($value as $obj) {
+                                $object->$propertyName[] = $this->array2Object($obj, $hasClass);
+                            }
+                        } elseif ($this->isAssocArray($value)) {
+                            if ($isArray) {
+                                $object->$propertyName = [];
+                            } else {
+                                $object->$propertyName = $this->array2Object($value, $hasClass);
+                            }
+                        }
+                    } else {
+                        $object->$propertyName = $value;
+                    }
+                }
+            }
+        }
+        return $object;
+    }
+
+    /**
+     * 关联数组
+     * @param array $array
+     *
+     * @return bool
+     */
+    public function isAssocArray(array $array): bool
+    {
+        // 如果数组的键与从 0 开始的连续整数不相等，则是关联数组
+        return array_keys($array) !== range(0, count($array) - 1);
+    }
+
+    /**
+     * 枚举数组
+     * @param array $array
+     *
+     * @return bool
+     */
+    public function isIndexedArray(array $array): bool
+    {
+        // 如果数组的键与从 0 开始的连续整数相等，则是枚举数组
+        return array_keys($array) === range(0, count($array) - 1);
+    }
+
+    /**
+     *
+     * 检查类是否存在
+     *
+     * @param $className
+     *
+     * @return bool|string
+     */
+    public function classExists($className)
+    {
+        //echo $className . " 99999\n";
+        if (class_exists($className)) {
+            return $className;
+        }
+        if (class_exists('\\ds\\' . $className)) {
+            return '\\ds\\' . $className;
+        }
+        if (class_exists('\\ds\\models\\' . $className)) {
+            return '\\ds\\models\\' . $className;
+        }
+        if (class_exists('\\ds\\models\\base\\' . $className)) {
+            return '\\ds\\models\\base\\' . $className;
+        }
+        return false;
+    }
+
+
+    /**
+     * @param $parentClass
+     * @param $propertyName
+     *
+     * @return array|null
+     * @throws ReflectionException
+     */
+    public function getNestedClass($parentClass, $propertyName): ?array
+    {
+        $reflection = new ReflectionClass($parentClass);
+        $property   = $reflection->getProperty($propertyName);
+        $docComment = $property->getDocComment();
+        // 解析 @var 注解中的类名（如 BaseResponse|null）
+        preg_match('/@var\s+([^\s|]+)/', $docComment, $matches);
+        if (!isset($matches[1])) {
+            return null;
+        }
+        $type      = $matches[1];
+        $isArray   = substr($type, -2) === '[]';          // Check if it's an array type
+        $className = preg_replace('/[\[\]]/', '', $type); // Remove array brackets if present
+        return [$className, $isArray];
+    }
+
+
 }

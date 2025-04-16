@@ -16,11 +16,4 @@ class OrderAfterRefundQueryRequest extends BaseRequest
         return 'ds.omni.erp.third.order.after.refund.query';
     }
 
-    /**
-     * @return void
-     */
-    public function buildResponse()
-    {
-
-    }
 }

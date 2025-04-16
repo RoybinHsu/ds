@@ -9,7 +9,7 @@ use ds\responses\PosQueryResponse;
 class PosQueryRequest extends BaseRequest
 {
 
-    protected ?string $responseClass = PosQueryResponse::class;
+    public ?string $responseClass = PosQueryResponse::class;
 
     /**
      * 店铺列表查询 ID：5wXnY089

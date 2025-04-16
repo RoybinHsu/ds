@@ -7,7 +7,7 @@ use ds\responses\OrderQueryResponse;
 
 class OrderQueryRequest extends BaseRequest
 {
-    protected ?string $responseClass = OrderQueryResponse::class;
+    public ?string $responseClass = OrderQueryResponse::class;
 
     /**
      * 店铺订单查询 ID：oNzvkW2D

@@ -8,10 +8,10 @@ interface ClientInterface
     /**
      * 发送一个api请求
      *
-     * @param RequestInterface $request
+     * @param BaseRequest $request
      *
      * @return mixed
      */
-    public function send(RequestInterface $request);
+    public function send(BaseRequest $request);
 
 }
