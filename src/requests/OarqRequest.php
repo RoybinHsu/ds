@@ -4,7 +4,10 @@ namespace ds\requests;
 
 use ds\BaseRequest;
 
-class OrderAfterRefundQueryRequest extends BaseRequest
+/**
+ * 接口名称简写
+ */
+class OarqRequest extends BaseRequest
 {
     /**
      * 店铺售后查询

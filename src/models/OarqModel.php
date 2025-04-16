@@ -24,7 +24,7 @@ use ds\BaseModel;
  *
  * @see http://wiki.yitaosoft.com/#/share/Rd8xagXg/jbXKOEX7
  */
-class OrderAfterRefundQueryModel extends BaseModel
+class OarqModel extends BaseModel
 {
     /**
      * 返回页码； 默认1， 当前采用分页返回，数量和页数会一起传，如果不传，则采用 默认值
