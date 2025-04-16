@@ -130,8 +130,8 @@ class DsClient extends BaseModel implements ClientInterface
             $this->_options[RequestOptions::HEADERS] = $request->getHeaders();
         }
         $this->_options = [
-            RequestOptions::BODY    => json_encode($request->getParams()),
-            RequestOptions::QUERY   => $this->requestCommonParams($request)->toArray(),
+            RequestOptions::BODY  => json_encode($request->getParams()),
+            RequestOptions::QUERY => $this->requestCommonParams($request)->toArray(),
         ];
         return $this->_options;
     }
@@ -211,7 +211,7 @@ class DsClient extends BaseModel implements ClientInterface
                 $signStr .= $k . $common[$k];
             }
         }
-        $body = json_decode($body, true);
+        $body    = json_decode($body, true);
         $signStr .= json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         return strtoupper(md5($this->appSecret . $signStr . $this->appSecret));
     }
@@ -295,6 +295,7 @@ class DsClient extends BaseModel implements ClientInterface
 
     /**
      * 关联数组
+     *
      * @param array $array
      *
      * @return bool
@@ -307,6 +308,7 @@ class DsClient extends BaseModel implements ClientInterface
 
     /**
      * 枚举数组
+     *
      * @param array $array
      *
      * @return bool
