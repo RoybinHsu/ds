@@ -211,7 +211,8 @@ class DsClient extends BaseModel implements ClientInterface
                 $signStr .= $k . $common[$k];
             }
         }
-        $signStr .= $body;
+        $body = json_decode($body, true);
+        $signStr .= json_encode($body);
         return strtoupper(md5($this->appSecret . $signStr . $this->appSecret));
     }
 
