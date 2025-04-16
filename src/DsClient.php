@@ -202,16 +202,17 @@ class DsClient extends BaseModel implements ClientInterface
      */
     public function sign(CommonParamsModel $common, string $body): string
     {
-        $sortKey = ['method', 'timestamp', 'tag', 'reqId'];
-        $signStr = 'appKey' . $this->appKey;
+        $sortKey = ['appKey', 'method', 'timestamp', 'tag', 'reqId'];
+        $signStr = '';
+        $common->setAppKey($this->appKey);
         $common  = $common->toArray();
+        sort($sortKey, SORT_ASC);
         foreach ($sortKey as $k) {
             if (isset($common[$k])) {
                 $signStr .= $k . $common[$k];
             }
         }
-        $body    = json_decode($body, true);
-        $signStr .= json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $signStr .= $body;
         return strtoupper(md5($this->appSecret . $signStr . $this->appSecret));
     }
 
