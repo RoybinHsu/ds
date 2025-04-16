@@ -24,11 +24,11 @@ use ds\BaseModel;
 class PosSkuQueryModel extends BaseModel
 {
     /**
-     * 店铺编码
+     * 店铺编码 必填
      *
-     * @var string|null
+     * @var string
      */
-    public ?string $posCode = null;
+    public string $posCode;
 
     /**
      * 平台商品的商家编码,多个使用,分割，不能超过50
