@@ -227,7 +227,7 @@ class DsClient extends BaseModel implements ClientInterface
      */
     public function checkSign(CommonParamsModel $common, string $body, string $sign): bool
     {
-        return $this->sign($common, $body) === $sign;
+        return $this->sign($common, $body) === strtoupper($sign);
     }
 
     public function getOptions(): array
