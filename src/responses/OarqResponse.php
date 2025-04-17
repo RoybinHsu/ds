@@ -4,14 +4,15 @@ namespace ds\responses;
 
 use ds\BaseModel;
 use ds\models\OarqModel;
+use ds\models\OrderContentModel;
 
 class OarqResponse extends BaseModel
 {
     /**
      * 售后结果
-     * @var OarqModel|null
+     * @var OrderContentModel|null
      */
-    public ?OarqModel $content = null;
+    public ?OrderContentModel $content = null;
 
     /**
      * 是否有下一页； true:有，false:无
