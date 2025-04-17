@@ -53,9 +53,10 @@ class PosSkuQtyUpdateRequest extends BaseRequest
         if ($this->data->content === null) {
             throw new InvalidArgumentException('Data content must be an instance of `PosSkuQtyUpdateContent`');
         }
-        foreach ($this->data->content as &$item) {
+        $params = $this->data->toArray();
+        foreach ($params['content'] as &$item) {
             $item = $item->toArray();
         }
-        return $this->data->toArray();
+        return $params;
     }
 }
