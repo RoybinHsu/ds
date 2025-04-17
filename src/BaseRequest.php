@@ -68,7 +68,7 @@ abstract class BaseRequest implements RequestInterface
         if ($this->responseClass === null) {
             return $response;
         }
-        if ($response['response']['code'] === 200 && $response['response']['flat'] === 'success' && $response['response']['success'] === true) {
+        if ($response['response']['flag'] === 'success') {
             return Utils::array2Object($response['response']['data'], $this->responseClass);
         }
         throw new HttpException('接口响应错误');
