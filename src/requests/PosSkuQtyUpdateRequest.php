@@ -5,6 +5,7 @@ namespace ds\requests;
 use ds\BaseModel;
 use ds\BaseRequest;
 use ds\models\PosSkuQtyUpdateModel;
+use ds\responses\PosSkuQtyUpdateResponse;
 use InvalidArgumentException;
 
 /**
@@ -18,6 +19,8 @@ use InvalidArgumentException;
  */
 class PosSkuQtyUpdateRequest extends BaseRequest
 {
+
+    public ?string $responseClass = PosSkuQtyUpdateResponse::class;
 
     /**
      * @var PosSkuQtyUpdateModel[]

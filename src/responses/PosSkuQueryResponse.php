@@ -3,6 +3,7 @@
 namespace ds\responses;
 
 use ds\BaseModel;
+use ds\models\PosSkuQueryContent;
 
 /**
  * @method array getContent()
@@ -14,7 +15,7 @@ class PosSkuQueryResponse extends BaseModel
 {
     /**
      * 商品内容
-     * @var array|null
+     * @var PosSkuQueryContent[]|null
      */
     public ?array $content = null;
 
