@@ -56,5 +56,6 @@ class PosSkuQtyUpdateRequest extends BaseRequest
         foreach ($this->data->content as &$item) {
             $item = $item->toArray();
         }
+        return $this->data->toArray();
     }
 }
