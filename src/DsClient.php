@@ -83,7 +83,6 @@ class DsClient extends BaseModel implements ClientInterface
      * @throws GuzzleException
      * @throws HttpException
      * @throws InvalidException
-     * @throws ReflectionException
      */
     public function send(BaseRequest $request)
     {
