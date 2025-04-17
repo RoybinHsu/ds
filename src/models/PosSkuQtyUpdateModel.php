@@ -4,6 +4,10 @@ namespace ds\models;
 
 use ds\BaseModel;
 
+/**
+ * @method PosSkuQtyUpdateContent[] |null  getContent()
+ * @method self setContent(PosSkuQtyUpdateContent[] | null $content)
+ */
 class PosSkuQtyUpdateModel extends BaseModel
 {
 
