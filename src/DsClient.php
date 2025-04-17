@@ -129,7 +129,8 @@ class DsClient extends BaseModel implements ClientInterface
             $this->_options[RequestOptions::HEADERS] = $request->getHeaders();
         }
         $this->_options = [
-            RequestOptions::BODY  => json_encode($request->getParams(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            RequestOptions::BODY  => json_encode($request->getParams(),
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             RequestOptions::QUERY => $this->requestCommonParams($request)->toArray(),
         ];
         return $this->_options;
@@ -187,7 +188,8 @@ class DsClient extends BaseModel implements ClientInterface
      */
     protected function _sign(CommonParamsModel $model, RequestInterface $request): CommonParamsModel
     {
-        $sign = $this->sign($model, json_encode($request->getParams(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $sign = $this->sign($model,
+            json_encode($request->getParams(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         $model->setSign($sign);
         return $model;
     }
@@ -205,7 +207,7 @@ class DsClient extends BaseModel implements ClientInterface
         $sortKey = ['appKey', 'method', 'timestamp', 'tag', 'reqId'];
         $signStr = '';
         $common->setAppKey($this->appKey);
-        $common  = $common->toArray();
+        $common = $common->toArray();
         sort($sortKey, SORT_ASC);
         foreach ($sortKey as $k) {
             if (isset($common[$k])) {
@@ -243,15 +245,16 @@ class DsClient extends BaseModel implements ClientInterface
      * @param array $response
      *
      * @return mixed|BaseModel
-     * @throws ReflectionException
+     * @throws HttpException
      */
     public function buildResponse(BaseRequest $request, array $response)
     {
-        if ($request->responseClass === null) {
-            return $response;
+        try {
+            return $request->beforeResponse($response);
+        } catch (ReflectionException|HttpException $e) {
+            $msg = '点三系统响应数据无效：' . $e->getMessage();
+            $this->event->trigger(Event::SEND_ERROR, $msg, $response);
+            throw new HttpException($msg);
         }
-        return Utils::array2Object($response['response']['data'], $request->responseClass);
     }
-
-
 }

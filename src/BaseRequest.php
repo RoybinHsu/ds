@@ -2,14 +2,9 @@
 
 namespace ds;
 
-use ds\models\OrderQueryModel;
-use ds\RequestInterface;
-use ds\responses\OrderQueryResponse;
-use GuzzleHttp\RequestOptions;
-use ReflectionClass;
+use ds\exceptions\HttpException;
 use ReflectionException;
-use ds\BaseResponse;
-use ds\Response;
+
 
 abstract class BaseRequest implements RequestInterface
 {
@@ -59,6 +54,24 @@ abstract class BaseRequest implements RequestInterface
     public function getParams(): array
     {
         return $this->data->toArray();
+    }
+
+    /**
+     * @param array $response
+     *
+     * @return BaseModel|mixed
+     * @throws ReflectionException
+     * @throws HttpException
+     */
+    public function beforeResponse(array $response)
+    {
+        if ($this->responseClass === null) {
+            return $response;
+        }
+        if ($response['response']['code'] === 200 && $response['response']['flat'] === 'success' && $response['response']['success'] === true) {
+            return Utils::array2Object($response['response']['data'], $this->responseClass);
+        }
+        throw new HttpException('接口响应错误');
     }
 
 

@@ -34,6 +34,11 @@ interface RequestInterface
      */
     public function getMethod(): string;
 
+    /**
+     * @return mixed|BaseModel
+     */
+    public function beforeResponse(array $response);
+
 
 
 }
