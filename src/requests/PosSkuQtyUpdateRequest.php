@@ -4,6 +4,7 @@ namespace ds\requests;
 
 use ds\BaseModel;
 use ds\BaseRequest;
+use ds\models\PosSkuQtyUpdateContent;
 use ds\models\PosSkuQtyUpdateModel;
 use ds\responses\PosSkuQtyUpdateResponse;
 use InvalidArgumentException;
@@ -23,11 +24,11 @@ class PosSkuQtyUpdateRequest extends BaseRequest
     public ?string $responseClass = PosSkuQtyUpdateResponse::class;
 
     /**
-     * @var PosSkuQtyUpdateModel[]
+     * @var PosSkuQtyUpdateModel
      */
     protected $data;
 
-    public function __construct(array $data)
+    public function __construct(PosSkuQtyUpdateModel $data)
     {
         parent::__construct();
         $this->data = $data;
@@ -49,14 +50,11 @@ class PosSkuQtyUpdateRequest extends BaseRequest
      */
     public function getParams(): array
     {
-        $p = [];
-        foreach ($this->data as $d) {
-            if ($d instanceof PosSkuQtyUpdateModel) {
-                $p[] = $d->toArray();
-            } else {
-                throw new InvalidArgumentException('Data must be an instance of `PosSkuQtyUpdateModel`');
-            }
+        if ($this->data->content === null) {
+            throw new InvalidArgumentException('Data content must be an instance of `PosSkuQtyUpdateContent`');
         }
-        return $p;
+        foreach ($this->data->content as &$item) {
+            $item = $item->toArray();
+        }
     }
 }

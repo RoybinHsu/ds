@@ -3,15 +3,15 @@
 namespace ds\responses;
 
 use ds\BaseModel;
-use ds\models\PosSkuQtyUpdateContent;
+use ds\models\PosSkuQtyUpdateResponseContent;
 
 class PosSkuQtyUpdateResponse extends BaseModel
 {
     /**
      * 店铺商品修改结果
-     * @var PosSkuQtyUpdateContent|null
+     * @var PosSkuQtyUpdateResponseContent|null
      */
-    public ?PosSkuQtyUpdateContent $content = null;
+    public ?PosSkuQtyUpdateResponseContent $content = null;
 
 
 }

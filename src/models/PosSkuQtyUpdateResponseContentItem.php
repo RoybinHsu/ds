@@ -14,7 +14,7 @@ use ds\BaseModel;
  * @method self setSyncStatus(string $syncStatus)
  * @method self setSyncMsg(string $syncMsg)
  */
-class PosSkuQtyUpdateContentItem extends BaseModel
+class PosSkuQtyUpdateResponseContentItem extends BaseModel
 {
     /**
      * 修改id
