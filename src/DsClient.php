@@ -149,13 +149,13 @@ class DsClient extends BaseModel implements ClientInterface
             $decoded = json_decode($response, true);
             if ($decoded === null) {
                 $msg = '点三系统响应数据无效：无法解析 JSON';
-                $this->event->trigger(Event::SEND_ERROR, $msg);
+                $this->event->trigger(Event::SEND_ERROR, $msg, $response);
                 throw new InvalidException($msg);
             }
             return $decoded;
         }
         $msg = '点三系统响应数据无效：响应为空';
-        $this->event->trigger(Event::SEND_ERROR, $msg);
+        $this->event->trigger(Event::SEND_ERROR, $msg, $response);
         throw new InvalidException($msg);
     }
 
