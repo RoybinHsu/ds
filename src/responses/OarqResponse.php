@@ -11,9 +11,9 @@ class OarqResponse extends BaseModel
 {
     /**
      * 售后结果
-     * @var OarqContent|null
+     * @var OarqContent[]|null
      */
-    public ?OarqContent $content = null;
+    public ?array $content = null;
 
     /**
      * 是否有下一页； true:有，false:无
