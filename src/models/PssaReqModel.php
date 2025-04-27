@@ -8,7 +8,7 @@ use ds\BaseModel;
  * 请求model
  * @see http://wiki.yitaosoft.com/#/share/5wXnJGX9/OmzWOxzl
  */
-class PassReqModel extends BaseModel
+class PssaReqModel extends BaseModel
 {
     /**
      * 同步类型 ，传固定值：STORE
